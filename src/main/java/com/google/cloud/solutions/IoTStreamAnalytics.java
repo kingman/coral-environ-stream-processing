@@ -1,22 +1,17 @@
 package com.google.cloud.solutions;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.api.services.bigquery.model.TableReference;
 import com.google.api.services.bigquery.model.TableRow;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.cloud.solutions.common.DeviceInfo;
 import com.google.cloud.solutions.common.Measurement;
 import com.google.cloud.solutions.common.MeasurementSummary;
-import com.google.cloud.solutions.transformation.MeasurementToDeviceInfoMap;
 import com.google.cloud.solutions.transformation.MeasurementToMeasurementSummary;
 import com.google.cloud.solutions.transformation.PubsubMessageToMeasurement;
 import com.google.cloud.solutions.utils.JsonSchemaValidator;
 import com.google.cloud.solutions.utils.MeasurementKeyGenerator;
 import com.google.cloud.solutions.utils.MeasurementTimestampGenerator;
 import com.google.cloud.solutions.utils.TableSchemaLoader;
-import com.google.common.collect.ImmutableList;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.gcp.bigquery.BigQueryIO;
@@ -40,7 +35,6 @@ import org.apache.beam.sdk.transforms.windowing.SlidingWindows;
 import org.apache.beam.sdk.transforms.windowing.Window;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
-import org.apache.beam.sdk.values.PCollectionView;
 import org.apache.beam.sdk.values.ValueInSingleWindow;
 import org.joda.time.Duration;
 

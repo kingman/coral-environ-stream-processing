@@ -18,6 +18,9 @@ public class MeasurementToMeasurementSummary
 
     @Override
     public MeasurementSummaryAccumulator addInput(MeasurementSummaryAccumulator accum, Measurement input) {
+        if (accum.getDeviceInfo() == null) {
+            accum.setDeviceInfo(input.getDeviceInfo());
+        }
         if (accum.getMin() > input.getValue()) {
             accum.setMin(input.getValue());
         }
@@ -41,6 +44,9 @@ public class MeasurementToMeasurementSummary
     public MeasurementSummaryAccumulator mergeAccumulators(Iterable<MeasurementSummaryAccumulator> accums) {
         MeasurementSummaryAccumulator merged = createAccumulator();
         for (MeasurementSummaryAccumulator accum : accums) {
+            if (merged.getDeviceInfo() == null) {
+                merged.setDeviceInfo(accum.getDeviceInfo());
+            }
             if (merged.getMin() > accum.getMin()) {
                 merged.setMin(accum.getMin());
             }
@@ -64,6 +70,7 @@ public class MeasurementToMeasurementSummary
     @Override
     public MeasurementSummary extractOutput(MeasurementSummaryAccumulator accum) {
         MeasurementSummary summary = new MeasurementSummary();
+        summary.setDeviceInfo(accum.getDeviceInfo());
         summary.setMin(accum.getMin());
         summary.setMax(accum.getMax());
         summary.setStart(accum.getStartStr());
