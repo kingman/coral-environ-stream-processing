@@ -1,6 +1,9 @@
 package com.google.cloud.solutions.common;
 
-public class MeasurementSummary {
+import java.io.Serializable;
+
+public class MeasurementSummary implements Serializable {
+    private static final long serialVersionUID = -232472685038863331L;
     private Double min;
     private Double max;
     private Double average;

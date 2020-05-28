@@ -17,6 +17,7 @@ To deploy the processing pipeline to Google Cloud DataFlow run:
              --windowFrequency=15 \
              --outputTable=sliding_time_summary \
              --jobName=foglamp-stream \
-             --runner=DataflowRunner"
+             --runner=DataflowRunner" \
+        -Pdataflow-runner
 
 
