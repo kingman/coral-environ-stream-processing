@@ -91,8 +91,6 @@ public class IoTStreamAnalytics {
                                 .apply("Apply sliding windowing", Window.<Measurement>into(SlidingWindows
                                                 .of(Duration.standardSeconds(options.getWindowSize()))
                                                 .every(Duration.standardSeconds(options.getWindowFrequency()))));
-                PCollectionView<Map<String, DeviceInfo>> deviceInfoMapView = windowedMetrics
-                                .apply(Combine.globally(new MeasurementToDeviceInfoMap()).asSingletonView());
 
                 windowedMetrics.apply("Create key for device and metric type combination",
                                 WithKeys.of(new MeasurementKeyGenerator()))
@@ -104,18 +102,9 @@ public class IoTStreamAnalytics {
                                                 .to(new DynamicDestinations<KV<String, MeasurementSummary>, DeviceInfo>() {
 
                                                         @Override
-                                                        public List<PCollectionView<?>> getSideInputs() {
-                                                                return ImmutableList.of(deviceInfoMapView);
-                                                        }
-
-                                                        @Override
                                                         public DeviceInfo getDestination(
                                                                         ValueInSingleWindow<KV<String, MeasurementSummary>> element) {
-                                                                Map<String, DeviceInfo> sideInput = sideInput(
-                                                                                deviceInfoMapView);
-                                                                String deviceNumId = element.getValue().getKey()
-                                                                                .split(":")[0];
-                                                                return sideInput.get(deviceNumId);
+                                                                return element.getValue().getValue().getDeviceInfo();
                                                         }
 
                                                         @Override
@@ -135,17 +124,11 @@ public class IoTStreamAnalytics {
 
                                                 }).withFormatFunction((element) -> {
                                                         MeasurementSummary summary = element.getValue();
-
-                                                        String deviceNumId = element.getKey().split(":")[0];
                                                         String metricType = element.getKey().split(":")[1];
 
-                                                        return new TableRow().set("DeviceNumId", deviceNumId)
-                                                                        .set("DeviceId", "HardcodedDevice") // todo:
-                                                                                                            // make
-                                                                                                            // dynamic
-                                                                        .set("RegistryId", "hardcodedregistry") // todo:
-                                                                                                                // make
-                                                                                                                // dynamic
+                                                        return new TableRow().set("DeviceNumId", summary.getDeviceInfo().getDeviceNumId())
+                                                                        .set("DeviceId", summary.getDeviceInfo().getDeviceId())
+                                                                        .set("RegistryId", summary.getDeviceInfo().getDeviceRegistryId()) 
                                                                         .set("MetricType", metricType)
                                                                         .set("PeriodStart", summary.getStart())
                                                                         .set("PeriodEnd", summary.getEnd())

@@ -8,6 +8,7 @@ import org.joda.time.Instant;
 public class MeasurementSummaryAccumulator implements Serializable {
     private static final long serialVersionUID = -3978327933098560442L;
 
+    private DeviceInfo deviceInfo;
     private double min;
     private double max;
     private double total;
@@ -24,6 +25,14 @@ public class MeasurementSummaryAccumulator implements Serializable {
         this.count = 0;
         this.start = Instant.now().plus(Duration.standardDays(10));
         this.end = Instant.EPOCH;
+    }
+
+    public DeviceInfo getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    public void setDeviceInfo(DeviceInfo deviceInfo) {
+        this.deviceInfo = deviceInfo;
     }
 
     public double getMin() {

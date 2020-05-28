@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class MeasurementSummary implements Serializable {
     private static final long serialVersionUID = -232472685038863331L;
+    private DeviceInfo deviceInfo;
     private Double min;
     private Double max;
     private Double average;
@@ -12,6 +13,14 @@ public class MeasurementSummary implements Serializable {
 
     public Double getMin() {
         return min;
+    }
+
+    public DeviceInfo getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    public void setDeviceInfo(DeviceInfo deviceInfo) {
+        this.deviceInfo = deviceInfo;
     }
 
     public void setMin(Double min) {
