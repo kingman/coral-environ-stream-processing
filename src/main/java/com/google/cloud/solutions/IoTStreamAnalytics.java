@@ -13,7 +13,8 @@ import com.google.cloud.solutions.transformation.MeasurementToDeviceInfoMap;
 import com.google.cloud.solutions.transformation.MeasurementToMeasurementSummary;
 import com.google.cloud.solutions.transformation.PubsubMessageToMeasurement;
 import com.google.cloud.solutions.utils.JsonSchemaValidator;
-import com.google.cloud.solutions.utils.MeasurementFunctions;
+import com.google.cloud.solutions.utils.MeasurementKeyGenerator;
+import com.google.cloud.solutions.utils.MeasurementTimestampGenerator;
 import com.google.cloud.solutions.utils.TableSchemaLoader;
 import com.google.common.collect.ImmutableList;
 
@@ -85,7 +86,7 @@ public class IoTStreamAnalytics {
                                 .apply("Validate metrics against schema", Filter.by(JsonSchemaValidator::validate))
                                 .apply("Flatten each measurement", ParDo.of(new PubsubMessageToMeasurement()))
                                 .apply("Set event timestamp",
-                                                WithTimestamps.<Measurement>of(MeasurementFunctions::extractTimeStamp)
+                                                WithTimestamps.<Measurement>of(new MeasurementTimestampGenerator())
                                                                 .withAllowedTimestampSkew(Duration.standardMinutes(10)))
                                 .apply("Apply sliding windowing", Window.<Measurement>into(SlidingWindows
                                                 .of(Duration.standardSeconds(options.getWindowSize()))
@@ -94,7 +95,7 @@ public class IoTStreamAnalytics {
                                 .apply(Combine.globally(new MeasurementToDeviceInfoMap()).asSingletonView());
 
                 windowedMetrics.apply("Create key for device and metric type combination",
-                                WithKeys.of(MeasurementFunctions::generateKey))
+                                WithKeys.of(new MeasurementKeyGenerator()))
                                 .apply("Create window summary",
                                                 Combine.<String, Measurement, MeasurementSummary>perKey(
                                                                 new MeasurementToMeasurementSummary()))
