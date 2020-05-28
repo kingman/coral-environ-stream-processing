@@ -20,4 +20,70 @@ To deploy the processing pipeline to Google Cloud DataFlow run:
              --runner=DataflowRunner" \
         -Pdataflow-runner
 
+The Beam pipeline reads `metrics-schema` and `table-schema` metadata values from Cloud IoT Core, and uses `metrics-schema` to validate the input data and `table-schema` value to create BigQuery table schema.
+
+To validate the metrics data sent by the foglamp south plugin for Coral Environmental Sensor Board set the metadata `metrics-schema` value to:
+
+     {
+       "$schema": "http://json-schema.org/draft-07/schema#",
+       "$id": "http://coral.ai/schemas/environmental.json",
+       "type": "object",
+       "properties": {
+         "enviro": {
+           "type": "array",
+           "items": {
+             "$ref": "#/definitions/measurement"
+           }
+         }
+       },
+       "required": [
+         "enviro"
+       ],
+       "definitions": {
+         "measurement": {
+           "type": "object",
+           "properties": {
+             "ts": {
+               "type": "string"
+             },
+             "temperature": {
+               "type": "number"
+             },
+             "pressure": {
+               "type": "number"
+             },
+             "humidity": {
+               "type": "number"
+             },
+             "ambient_light": {
+               "type": "number"
+             },
+             "grove_analog": {
+               "type": "number"
+             }
+           },
+           "propertyNames": {
+             "pattern": "^(ts|temperature|pressure|humidity|ambient_light|grove_analog)$"
+           },
+           "required": [
+             "ts"
+           ]
+         }
+       }
+     }
+
+And to define the BigQuery table schema for store the metrics data, set the metadata `table-schema` value to:
+
+     [
+          {"mode":"REQUIRED","name":"DeviceNumId","type":"STRING"},
+          {"mode":"REQUIRED","name":"DeviceId","type":"STRING"},
+          {"mode":"REQUIRED","name":"RegistryId","type":"STRING"},
+          {"mode":"REQUIRED","name":"MetricType","type":"STRING"},
+          {"mode":"REQUIRED","name":"PeriodStart","type":"TIMESTAMP"},
+          {"mode":"REQUIRED","name":"PeriodEnd","type":"TIMESTAMP"},
+          {"mode":"REQUIRED","name":"MaxValue","type":"FLOAT"},
+          {"mode":"REQUIRED","name":"MinValue","type":"FLOAT"},
+          {"mode":"REQUIRED","name":"Average","type":"FLOAT"}
+     ]
+
 
