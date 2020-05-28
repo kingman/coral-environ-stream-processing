@@ -86,6 +86,5 @@ public class IoTStreamAnalytics {
                         .withWriteDisposition(WriteDisposition.WRITE_APPEND));
                 
                 pipeline.run();
-
         }
 }

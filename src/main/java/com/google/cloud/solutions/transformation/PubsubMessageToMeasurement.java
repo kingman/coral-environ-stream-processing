@@ -19,7 +19,7 @@ public class PubsubMessageToMeasurement extends DoFn<PubsubMessage, Measurement>
 
     private static final long serialVersionUID = 8694500821507947562L;
     private static DateTimeFormatter TIME_STAMP_FORMAT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
-            .withZone(DateTimeZone.forID("CET"));
+            .withZone(DateTimeZone.forID("UTC"));
 
     @ProcessElement
     public void processElement(@Element PubsubMessage message, OutputReceiver<Measurement> receiver) {
