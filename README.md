@@ -9,7 +9,7 @@ Execute following steps to run this sample.
 1.  In the GCP Console, [open Cloud Shell](http://console.cloud.google.com/?cloudshell=true).
 1.  Clone the source code repository:
 
-        cd "$HOME"\
+        cd "$HOME"
         git clone https://github.com/kingman/coral-environ-stream-processing.git
 1. Generate [application default credentials](https://cloud.google.com/sdk/gcloud/reference/auth/application-default):
 
