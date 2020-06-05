@@ -2,6 +2,7 @@
 .project
 .classpath
 .settings/
+.terraform
 /target
 **/Test.java
 backend.tf
