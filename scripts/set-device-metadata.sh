@@ -14,6 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if [ -z "${GOOGLE_CLOUD_PROJECT}" ]; then
+    echo 'The GOOGLE_CLOUD_PROJECT environment variable that points to the Google Cloud project is not defined. Terminating...'
+    exit 1
+fi
+
 if [ -z "${IOT_REGISTRY_ID}" ]; then
     echo 'The IOT_REGISTRY_ID environment variable that points to the Cloud IoT Core registry is not defined. Terminating...'
     exit 1
@@ -30,6 +35,7 @@ if [ -z "${IOT_DEVICE_ID}" ]; then
 fi
 
 gcloud iot devices create ${IOT_DEVICE_ID} \
+  --project=${GOOGLE_CLOUD_PROJECT} \
   --region=${GOOGLE_CLOUD_REGION} \
   --registry=${IOT_REGISTRY_ID} \
   --metadata-from-file=metrics-schema=metrics-schema.json,table-schema=table-schema.json
