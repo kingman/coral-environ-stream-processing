@@ -1,0 +1,47 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://coral.ai/schemas/environmental.json",
+    "type": "object",
+    "properties": {
+        "enviro": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/measurement"
+            }
+        }
+    },
+    "required": [
+        "enviro"
+    ],
+    "definitions": {
+        "measurement": {
+            "type": "object",
+            "properties": {
+                "ts": {
+                    "type": "string"
+                },
+                "temperature": {
+                    "type": "number"
+                },
+                "pressure": {
+                    "type": "number"
+                },
+                "humidity": {
+                    "type": "number"
+                },
+                "ambient_light": {
+                    "type": "number"
+                },
+                "grove_analog": {
+                    "type": "number"
+                }
+            },
+            "propertyNames": {
+                "pattern": "^(ts|temperature|pressure|humidity|ambient_light|grove_analog)$"
+            },
+            "required": [
+                "ts"
+            ]
+        }
+    }
+}

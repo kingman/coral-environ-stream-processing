@@ -20,6 +20,7 @@ import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.options.StreamingOptions;
+import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.options.Validation.Required;
 import org.apache.beam.sdk.transforms.Combine;
 import org.apache.beam.sdk.transforms.Filter;
@@ -36,9 +37,9 @@ public class IoTStreamAnalytics {
         public interface IoTStreamAnalyticsOptions extends PipelineOptions, StreamingOptions {
                 @Description("The Cloud Pub/Sub topic to read from.")
                 @Required
-                String getInputTopic();
+                ValueProvider<String> getInputTopic();
 
-                void setInputTopic(String value);
+                void setInputTopic(ValueProvider<String> value);
 
                 @Description("The window size in number of seconds of which the average value is calculated on.")
                 @Default.Integer(30)
@@ -54,9 +55,9 @@ public class IoTStreamAnalytics {
 
                 @Description("The out put table. Fully-qualified BigQuery table name: [project_id]:[dataset_id].[table_id]")
                 @Required
-                String getOutputTable();
+                ValueProvider<String> getOutputTable();
 
-                void setOutputTable(String value);
+                void setOutputTable(ValueProvider<String> value);
         }
 
         public static void main(String[] args) {
