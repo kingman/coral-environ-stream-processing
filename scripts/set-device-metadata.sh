@@ -32,4 +32,4 @@ fi
 gcloud iot devices create ${IOT_DEVICE_ID} \
   --region=${GOOGLE_CLOUD_REGION} \
   --registry=${IOT_REGISTRY_ID} \
-  ----metadata-from-file=metrics-schema=metrics-schema.json,table-schema=table-schema.json
+  --metadata-from-file=metrics-schema=metrics-schema.json,table-schema=table-schema.json
