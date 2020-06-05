@@ -75,8 +75,8 @@ To deploy the Dataflow stream processing job through Terraform, the Dataflow job
 
 * In Cloud Shell, create and stage the Dataflow template:
 
-        cd "$HOME"/coral-environ-stream-processing/scripts
-        ./build-dataflow-template.sh
+        cd "$HOME"/coral-environ-stream-processing
+        scripts/build-dataflow-template.sh
 
 ## Create backend resources
 The Terraform template file `terraform/main.tf` defines the resources that are created for this tutorial. By running Terraform with that descriptor, you create the following Google Cloud resources:
