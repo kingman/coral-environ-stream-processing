@@ -37,6 +37,30 @@ Execute following steps to run this sample.
 
 Before you can provision the necessary infrastructure for this tutorial, you need to initialize and export the following environment variables:
 
+1. Create an environment variable that stores your Google Cloud project ID
+
+        export GOOGLE_CLOUD_PROJECT=${DEVSHELL_PROJECT_ID}
+
+1. Create an environment variable that stores your Google Cloud region
+
+        export GOOGLE_CLOUD_REGION=[REGION]
+
+    Replace the following:
+    * **[REGION]** Your preferred region of operation, can be one of the following `us-central1`, `europe-west1`, or `asia-east1`
+
+1. Create an environment variable that stores your Google Cloud zone
+
+        export GOOGLE_CLOUD_ZONE=[ZONE]
+
+    Replace the following:
+    * **[ZONE]** Your preferred zone of operation, use following table to determine the possible values to set:
+
+        |Region|Zone|
+        |-|-|
+        |us-central1|us-central1-a, us-central1-b, us-central1-c, us-central1-f|
+        |europe-west1|europe-west1-b, europe-west1-c, europe-west1-d|
+        |asia-east1|asia-east1-a, asia-east1-b, asia-east1-c|
+
 1. Create an environment variable that stores path to the default Google Cloud application default credentials, which is the value you noted in the preceding section:
 
         export GOOGLE_APPLICATION_CREDENTIALS=[PATH]
@@ -56,7 +80,7 @@ You need to run the `generate-tf-backend.sh` shell script that generates the [Te
 * In Cloud Shell, provision your build environment:
 
         cd "$HOME"/coral-environ-stream-processing
-        ./generate-tf-backend.sh
+        scripts/generate-tf-backend.sh
 
     The script is idempotent and safe to run multiple times.
 

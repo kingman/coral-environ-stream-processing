@@ -61,7 +61,7 @@ resource "google_cloudiot_registry" "device-registry" {
 
 resource "google_bigquery_dataset" "dataset" {
     dataset_id = "foglamp"
-    location = var.google_bigquery_default_zone
+    location = var.google_bigquery_default_region
     project = var.google_project_id
 }
 

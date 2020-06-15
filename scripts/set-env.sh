@@ -15,19 +15,8 @@
 # limitations under the License.
 
 export TF_SERVICE_ACCOUNT_NAME=tf-service-account
-export TF_STATE_PROJECT=${DEVSHELL_PROJECT_ID}
+export TF_STATE_PROJECT=${GOOGLE_CLOUD_PROJECT}
 export TF_STATE_BUCKET=tf-state-bucket-${TF_STATE_PROJECT}
-export GOOGLE_CLOUD_PROJECT=${DEVSHELL_PROJECT_ID}
-export GOOGLE_CLOUD_REGION=europe-west1
 export IOT_REGISTRY_ID=device-registry
 export IOT_DEVICE_ID=enviro-plugin
 export DATAFLOW_TEMPLATE_BUCKET=stream-processing-${GOOGLE_CLOUD_PROJECT}
-export TF_VAR_google_project_id=${GOOGLE_CLOUD_PROJECT}
-export TF_VAR_google_default_region=${GOOGLE_CLOUD_REGION}
-export TF_VAR_google_default_zone=europe-west1-b
-export TF_VAR_google_iot_registry_id=${IOT_REGISTRY_ID}
-export TF_VAR_google_bigquery_default_zone=europe-west2
-export TF_VAR_google_dataflow_default_bucket=${DATAFLOW_TEMPLATE_BUCKET}
-export TF_VAR_stream_processing_window_size=40
-export TF_VAR_stream_processing_window_frequency=15
-

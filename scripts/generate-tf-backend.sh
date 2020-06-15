@@ -40,6 +40,16 @@ if [ -z "${GOOGLE_CLOUD_PROJECT}" ]; then
     exit 1
 fi
 
+if [ -z "${GOOGLE_CLOUD_REGION}" ]; then
+    echo 'The GOOGLE_CLOUD_REGION environment variable that points to the default Google Cloud region that Terraform will provision the resources in is not defined. Terminating...'
+    exit 1
+fi
+
+if [ -z "${GOOGLE_CLOUD_ZONE}" ]; then
+    echo 'The GOOGLE_CLOUD_ZONE environment variable that points to the default Google Cloud zone that Terraform will provision the resources in is not defined. Terminating...'
+    exit 1
+fi
+
 if [ -z "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
     echo 'The GOOGLE_APPLICATION_CREDENTIALS environment variable that points to the default Google Cloud application credentials that Terraform will use is not defined. Terminating...'
     exit 1
@@ -98,5 +108,30 @@ terraform {
         prefix  = "terraform/state"
     }
 }
+EOF
+fi
+
+TERRAFORM_VARIABEL_FILE_PATH=terraform/terraform.tfvars
+echo "Generate the terraform variables in ${TERRAFORM_VARIABEL_FILE_PATH}"
+if [ -f "${TERRAFORM_VARIABEL_FILE_PATH}" ]; then
+    echo "The ${TERRAFORM_VARIABEL_FILE_PATH} file already exists."
+else
+    if [[ ${GOOGLE_CLOUD_REGION} == *"asia-"* ]]; then
+        GOOGLE_BIGQUERY_REGION = "	asia-east1"
+    fi
+    if [[ ${GOOGLE_CLOUD_REGION} == *"europe-"* ]]; then
+        GOOGLE_BIGQUERY_REGION = "europe-west3"
+    else
+        GOOGLE_BIGQUERY_REGION = "us-west2"
+    fi
+    tee "${TERRAFORM_VARIABEL_FILE_PATH}" <<EOF
+google_project_id="${GOOGLE_CLOUD_PROJECT}"
+google_default_region="${GOOGLE_CLOUD_REGION}"
+google_default_zone="${GOOGLE_CLOUD_ZONE}"
+google_iot_registry_id="${IOT_REGISTRY_ID}"
+google_bigquery_default_region="${GOOGLE_BIGQUERY_REGION}"
+google_dataflow_default_bucket="${DATAFLOW_TEMPLATE_BUCKET}"
+stream_processing_window_size=40
+stream_processing_window_frequency=15
 EOF
 fi
