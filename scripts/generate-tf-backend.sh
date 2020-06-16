@@ -131,8 +131,7 @@ if [ -f "${TERRAFORM_VARIABEL_FILE_PATH}" ]; then
 else
     if [[ ${GOOGLE_CLOUD_REGION} == *"asia-"* ]]; then
         GOOGLE_BIGQUERY_REGION = "asia-east1"
-    fi
-    if [[ ${GOOGLE_CLOUD_REGION} == *"europe-"* ]]; then
+    elif [[ ${GOOGLE_CLOUD_REGION} == *"europe-"* ]]; then
         GOOGLE_BIGQUERY_REGION = "europe-west3"
     else
         GOOGLE_BIGQUERY_REGION = "us-west2"
