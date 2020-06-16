@@ -130,11 +130,11 @@ if [ -f "${TERRAFORM_VARIABEL_FILE_PATH}" ]; then
     echo "The ${TERRAFORM_VARIABEL_FILE_PATH} file already exists."
 else
     if [[ ${GOOGLE_CLOUD_REGION} == *"asia-"* ]]; then
-        GOOGLE_BIGQUERY_REGION = "asia-east1"
+        GOOGLE_BIGQUERY_REGION="asia-east1"
     elif [[ ${GOOGLE_CLOUD_REGION} == *"europe-"* ]]; then
-        GOOGLE_BIGQUERY_REGION = "europe-west3"
+        GOOGLE_BIGQUERY_REGION="europe-west3"
     else
-        GOOGLE_BIGQUERY_REGION = "us-west2"
+        GOOGLE_BIGQUERY_REGION="us-west2"
     fi
     tee "${TERRAFORM_VARIABEL_FILE_PATH}" <<EOF
 google_project_id="${GOOGLE_CLOUD_PROJECT}"
