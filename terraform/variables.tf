@@ -7,4 +7,3 @@ variable "google_dataflow_default_bucket" {}
 variable "stream_processing_window_size" {}
 variable "stream_processing_window_frequency" {}
 variable "google_bigquery_dataset_id" {}
-variable "google_bigquery_table_id" {}

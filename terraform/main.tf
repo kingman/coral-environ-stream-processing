@@ -65,15 +65,6 @@ resource "google_bigquery_dataset" "dataset" {
     project = var.google_project_id
 }
 
-resource "google_bigquery_table" "table" {
-    dataset_id = var.google_bigquery_dataset_id
-    table_id   = var.google_bigquery_table_id
-    project = var.google_project_id
-    depends_on = [
-      google_bigquery_dataset.dataset
-    ]
-} 
-
 resource "google_dataflow_job" "streaming-processing" {
     name = "iot-event-processor"
     template_gcs_path = "gs://${var.google_dataflow_default_bucket}/templates/iot-stream-processing"

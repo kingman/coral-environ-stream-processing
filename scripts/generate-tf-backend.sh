@@ -65,11 +65,6 @@ if [ -z "${BIGQUERY_DATASET_ID}" ]; then
     exit 1
 fi
 
-if [ -z "${BIGQUERY_TABLE_ID}" ]; then
-    echo 'The BIGQUERY_TABLE_ID environment variable that points to the Google Cloud BigQuery table is not defined. Terminating...'
-    exit 1
-fi
-
 echo "Setting the default Google Cloud project to ${TF_STATE_PROJECT}"
 gcloud config set project "${TF_STATE_PROJECT}"
 
@@ -143,7 +138,6 @@ google_default_zone="${GOOGLE_CLOUD_ZONE}"
 google_iot_registry_id="${IOT_REGISTRY_ID}"
 google_bigquery_default_region="${GOOGLE_BIGQUERY_REGION}"
 google_bigquery_dataset_id="${BIGQUERY_DATASET_ID}"
-google_bigquery_table_id="${BIGQUERY_TABLE_ID}"
 google_dataflow_default_bucket="${DATAFLOW_TEMPLATE_BUCKET}"
 stream_processing_window_size=40
 stream_processing_window_frequency=15
