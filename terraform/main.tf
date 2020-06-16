@@ -68,7 +68,6 @@ resource "google_bigquery_dataset" "dataset" {
 resource "google_bigquery_table" "table" {
     dataset_id = var.google_bigquery_dataset_id
     table_id   = var.google_bigquery_table_id
-    location = var.google_bigquery_default_region
     project = var.google_project_id
     depends_on = [
       google_bigquery_dataset.dataset
