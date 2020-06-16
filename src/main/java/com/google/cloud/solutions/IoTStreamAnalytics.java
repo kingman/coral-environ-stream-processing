@@ -52,12 +52,6 @@ public class IoTStreamAnalytics {
                 Integer getWindowFrequency();
 
                 void setWindowFrequency(Integer value);
-
-                @Description("The out put table. Fully-qualified BigQuery table name: [project_id]:[dataset_id].[table_id]")
-                @Required
-                ValueProvider<String> getOutputTable();
-
-                void setOutputTable(ValueProvider<String> value);
         }
 
         public static void main(String[] args) {

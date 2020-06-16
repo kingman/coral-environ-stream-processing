@@ -156,7 +156,6 @@ To manually deploy the Dataflow streaming pipeline run:
              --inputTopic=[PUBSUB_TOPIC] \
              --windowSize=40 \
              --windowFrequency=15 \
-             --outputTable=sliding_time_summary \
              --jobName=foglamp-stream \
              --runner=DataflowRunner" \
         -Pdataflow-runner

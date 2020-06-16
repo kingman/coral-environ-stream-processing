@@ -60,10 +60,20 @@ resource "google_cloudiot_registry" "device-registry" {
 }
 
 resource "google_bigquery_dataset" "dataset" {
-    dataset_id = "foglamp"
+    dataset_id = var.google_bigquery_dataset_id
     location = var.google_bigquery_default_region
     project = var.google_project_id
 }
+
+resource "google_bigquery_table" "table" {
+    dataset_id = var.google_bigquery_dataset_id
+    table_id   = var.google_bigquery_table_id
+    location = var.google_bigquery_default_region
+    project = var.google_project_id
+    depends_on = [
+      google_bigquery_dataset.dataset
+    ]
+} 
 
 resource "google_dataflow_job" "streaming-processing" {
     name = "iot-event-processor"
@@ -77,10 +87,9 @@ resource "google_dataflow_job" "streaming-processing" {
     parameters = {
         streaming = true
         numWorkers = 1
-	    inputTopic = google_pubsub_topic.default-telemetry.id
+        inputTopic = google_pubsub_topic.default-telemetry.id
         windowSize = var.stream_processing_window_size
         windowFrequency = var.stream_processing_window_frequency
-        outputTable = "sliding_window_summary"
     }
     
     depends_on = [

@@ -20,3 +20,5 @@ export TF_STATE_BUCKET=tf-state-bucket-${TF_STATE_PROJECT}
 export IOT_REGISTRY_ID=device-registry
 export IOT_DEVICE_ID=enviro-plugin
 export DATAFLOW_TEMPLATE_BUCKET=stream-processing-${GOOGLE_CLOUD_PROJECT}
+export BIGQUERY_DATASET_ID=foglamp
+export BIGQUERY_TABLE_ID=metrics_summary

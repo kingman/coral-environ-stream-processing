@@ -1,9 +1,9 @@
 package com.google.cloud.solutions.transformation;
 
-import com.google.api.services.bigquery.model.TableReference;
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.cloud.solutions.common.DeviceInfo;
 import com.google.cloud.solutions.common.MeasurementSummary;
+import com.google.cloud.solutions.utils.TableDestinationLoader;
 import com.google.cloud.solutions.utils.TableSchemaLoader;
 
 import org.apache.beam.sdk.io.gcp.bigquery.DynamicDestinations;
@@ -22,17 +22,13 @@ public class MeasurementSummaryToTableDestination
     }
 
     @Override
-    public TableDestination getTable(DeviceInfo destination) {
-        return new TableDestination(
-                new TableReference().setProjectId(destination.getProjectId()).setDatasetId("foglamp") // TODO make
-                                                                                                      // dynamic
-                        .setTableId("dynamic_written"), // TODO make dynamic
-                "Table  dynamic_written");
+    public TableDestination getTable(DeviceInfo deviceInfo) {
+        return TableDestinationLoader.getDestination(deviceInfo);
     }
 
     @Override
-    public TableSchema getSchema(DeviceInfo destination) {
-        return TableSchemaLoader.getSchema(destination);
+    public TableSchema getSchema(DeviceInfo deviceInfo) {
+        return TableSchemaLoader.getSchema(deviceInfo);
     }
 
 }

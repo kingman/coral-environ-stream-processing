@@ -60,6 +60,16 @@ if [ -z "${DATAFLOW_TEMPLATE_BUCKET}" ]; then
     exit 1
 fi
 
+if [ -z "${BIGQUERY_DATASET_ID}" ]; then
+    echo 'The BIGQUERY_DATASET_ID environment variable that points to the Google Cloud BigQuery dataset is not defined. Terminating...'
+    exit 1
+fi
+
+if [ -z "${BIGQUERY_TABLE_ID}" ]; then
+    echo 'The BIGQUERY_TABLE_ID environment variable that points to the Google Cloud BigQuery table is not defined. Terminating...'
+    exit 1
+fi
+
 echo "Setting the default Google Cloud project to ${TF_STATE_PROJECT}"
 gcloud config set project "${TF_STATE_PROJECT}"
 
@@ -80,6 +90,9 @@ echo "Granting the service account permission to manage Cloud Storage"
 gcloud projects add-iam-policy-binding "${TF_STATE_PROJECT}" \
     --member serviceAccount:"${TF_SERVICE_ACCOUNT_NAME}"@"${TF_STATE_PROJECT}".iam.gserviceaccount.com \
     --role roles/storage.admin
+
+echo "Enable the Cloud Resource Manager API with"
+gcloud services enable cloudresourcemanager.googleapis.com
 
 echo "Creating a new Google Cloud Storage bucket to store the Terraform state in ${TF_STATE_PROJECT} project, bucket: ${TF_STATE_BUCKET}"
 if gsutil ls -b gs://"${TF_STATE_BUCKET}" >/dev/null 2>&1; then
@@ -117,7 +130,7 @@ if [ -f "${TERRAFORM_VARIABEL_FILE_PATH}" ]; then
     echo "The ${TERRAFORM_VARIABEL_FILE_PATH} file already exists."
 else
     if [[ ${GOOGLE_CLOUD_REGION} == *"asia-"* ]]; then
-        GOOGLE_BIGQUERY_REGION = "	asia-east1"
+        GOOGLE_BIGQUERY_REGION = "asia-east1"
     fi
     if [[ ${GOOGLE_CLOUD_REGION} == *"europe-"* ]]; then
         GOOGLE_BIGQUERY_REGION = "europe-west3"
@@ -130,6 +143,8 @@ google_default_region="${GOOGLE_CLOUD_REGION}"
 google_default_zone="${GOOGLE_CLOUD_ZONE}"
 google_iot_registry_id="${IOT_REGISTRY_ID}"
 google_bigquery_default_region="${GOOGLE_BIGQUERY_REGION}"
+google_bigquery_dataset_id="${BIGQUERY_DATASET_ID}"
+google_bigquery_table_id="${BIGQUERY_TABLE_ID}"
 google_dataflow_default_bucket="${DATAFLOW_TEMPLATE_BUCKET}"
 stream_processing_window_size=40
 stream_processing_window_frequency=15

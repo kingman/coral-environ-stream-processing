@@ -14,6 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if [ -z "${GOOGLE_CLOUD_PROJECT}" ]; then
+    echo 'The GOOGLE_CLOUD_PROJECT environment variable that points to the Google Cloud project is not defined. Terminating...'
+    exit 1
+fi
+
 if [ -z "${DATAFLOW_TEMPLATE_BUCKET}" ]; then
     echo 'The DATAFLOW_TEMPLATE_BUCKET environment variable that points to the Google Cloud Storage bucket to store and stage dataflow template is not defined. Terminating...'
     exit 1
