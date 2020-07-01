@@ -5,14 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessage;
+import org.apache.beam.sdk.transforms.SerializableFunction;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-public class JsonSchemaValidator {
+public class JsonSchemaValidator implements SerializableFunction<PubsubMessage, Boolean>{
 
+    private static final long serialVersionUID = 2540822907982136981L;
     private final String schemaMetadataKey;
     private Map<String, Schema> schemaCache;
 
@@ -21,7 +23,8 @@ public class JsonSchemaValidator {
         this.schemaCache = new HashMap<>();
     }
 
-    public Boolean validate(PubsubMessage message) {
+    @Override
+    public Boolean apply(PubsubMessage message) {
         Schema schema = getSchema(message);
         if (schema == null) { // not schema available to validate against
             return true;

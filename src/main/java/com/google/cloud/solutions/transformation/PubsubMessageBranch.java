@@ -27,9 +27,9 @@ public class PubsubMessageBranch extends DoFn<PubsubMessage, PubsubMessage> {
 
     @ProcessElement
     public void processElement(ProcessContext context) {
-        if(metricValidator.validate(context.element())) {
+        if(metricValidator.apply(context.element())) {
             context.output(metricTag, context.element());
-        } else if (inferenceValidator.validate(context.element())) {
+        } else if (inferenceValidator.apply(context.element())) {
             context.output(inferenceTag, context.element());
         } else {
             context.output(unknownMessageTag, context.element());
