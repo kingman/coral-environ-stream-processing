@@ -1,0 +1,64 @@
+[
+    {
+        "mode": "REQUIRED",
+        "name": "DeviceNumId",
+        "type": "STRING"
+    },
+    {
+        "mode": "REQUIRED",
+        "name": "DeviceId",
+        "type": "STRING"
+    },
+    {
+        "mode": "REQUIRED",
+        "name": "RegistryId",
+        "type": "STRING"
+    },
+    {
+        "mode": "REQUIRED",
+        "name": "TimeStamp",
+        "type": "TIMESTAMP"
+    },
+    {
+        "mode": "REQUIRED",
+        "name": "Count",
+        "type": "INT64"
+    },
+    {
+        "mode": "REPEATED",
+        "name": "Detections",
+        "type": "RECORD",
+        "fields": [
+            {
+                "mode": "NULLABLE",
+                "name": "Label",
+                "type": "STRING"
+            },
+            {
+                "mode": "NULLABLE",
+                "name": "Score",
+                "type": "STRING"
+            },
+            {
+                "mode": "NULLABLE",
+                "name": "X1",
+                "type": "INT64"
+            },
+            {
+                "mode": "NULLABLE",
+                "name": "Y1",
+                "type": "INT64"
+            },
+            {
+                "mode": "NULLABLE",
+                "name": "X2",
+                "type": "INT64"
+            },
+            {
+                "mode": "NULLABLE",
+                "name": "Y2",
+                "type": "INT64"
+            }
+        ]
+    }
+]

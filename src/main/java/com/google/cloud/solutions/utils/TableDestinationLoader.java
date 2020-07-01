@@ -9,22 +9,22 @@ import com.google.cloud.solutions.common.DeviceInfo;
 import org.apache.beam.sdk.io.gcp.bigquery.TableDestination;
 
 public class TableDestinationLoader {
-    private static final String DESTINATION_TABLE_METADATA_KEY = "destination-table";
-    private static final String DESTINATION_DATASET_METADATA_KEY = "destination-dataset";
+    private static final String DESTINATION_TABLE_METADATA_PREFIX = "destination-table-";
+    private static final String DESTINATION_DATASET_METADATA_PREFIX = "destination-dataset-";
     private static Map<String, TableDestination> destinationCache = new HashMap<>();
 
-    public static TableDestination getDestination(DeviceInfo deviceInfo) {
-        final String devicePath = getCacheKey(deviceInfo);
+    public static TableDestination getDestination(DeviceInfo deviceInfo, String messageType) {
+        final String devicePath = getCacheKey(deviceInfo, messageType);
         if (destinationCache.containsKey(devicePath)) {
             return destinationCache.get(devicePath);
         }
 
-        String table = fetchMetadata(deviceInfo, DESTINATION_TABLE_METADATA_KEY);
+        String table = fetchMetadata(deviceInfo, DESTINATION_TABLE_METADATA_PREFIX+messageType);
         if (table == null) {
             throw new RuntimeException(String.format("No destination table find for device: %s", devicePath));
         }
 
-        String dataset = fetchMetadata(deviceInfo, DESTINATION_DATASET_METADATA_KEY);
+        String dataset = fetchMetadata(deviceInfo, DESTINATION_DATASET_METADATA_PREFIX+messageType);
         if (dataset == null) {
             throw new RuntimeException(String.format("No destination dataset find for device: %s", devicePath));
         }
@@ -47,9 +47,9 @@ public class TableDestinationLoader {
         }
     }
 
-    private static String getCacheKey(DeviceInfo deviceInfo) {
-        return String.format("projects/%s/locations/%s/registries/%s/devices/%s", deviceInfo.getProjectId(),
-                deviceInfo.getDeviceRegistryLocation(), deviceInfo.getDeviceRegistryId(), deviceInfo.getDeviceId());
+    private static String getCacheKey(DeviceInfo deviceInfo, String messageType) {
+        return String.format("projects/%s/locations/%s/registries/%s/devices/%s/%s", deviceInfo.getProjectId(),
+                deviceInfo.getDeviceRegistryLocation(), deviceInfo.getDeviceRegistryId(), deviceInfo.getDeviceId(), messageType);
 
     }
 }

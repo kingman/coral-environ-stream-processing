@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://lfedge.org/schemas/human-detector.json",
+    "type": "object",
+    "properties": {
+        "Detection Results": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/detections"
+            }
+        }
+    },
+    "required": [
+        "Detection Results"
+    ],
+    "definitions": {
+        "detections": {
+            "type": "object",
+            "properties": {
+                "ts": {
+                    "type": "string"
+                },
+                "count": {
+                    "type": "integer"
+                }
+            },
+            "propertyNames": {
+                "pattern": "^(ts|person_\\d+_(label|score|x1|y1|x2|y2))$"
+            },
+            "required": [
+                "ts",
+                "count"
+            ]
+        }
+    }
+}

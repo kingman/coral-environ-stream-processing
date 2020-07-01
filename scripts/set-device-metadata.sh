@@ -39,8 +39,13 @@ if [ -z "${BIGQUERY_DATASET_ID}" ]; then
     exit 1
 fi
 
-if [ -z "${BIGQUERY_TABLE_ID}" ]; then
-    echo 'The BIGQUERY_TABLE_ID environment variable that points to the Google Cloud BigQuery table is not defined. Terminating...'
+if [ -z "${BIGQUERY_METRICS_TABLE_ID}" ]; then
+    echo 'The BIGQUERY_METRICS_TABLE_ID environment variable that points to the Google Cloud BigQuery table is not defined. Terminating...'
+    exit 1
+fi
+
+if [ -z "${BIGQUERY_INFERENCE_TABLE_ID}" ]; then
+    echo 'The BIGQUERY_INFERENCE_TABLE_ID environment variable that points to the Google Cloud BigQuery table is not defined. Terminating...'
     exit 1
 fi
 
@@ -49,5 +54,5 @@ gcloud iot devices create ${IOT_DEVICE_ID} \
   --project=${GOOGLE_CLOUD_PROJECT} \
   --region=${GOOGLE_CLOUD_REGION} \
   --registry=${IOT_REGISTRY_ID} \
-  --metadata-from-file=metrics-schema=metrics-schema.json,table-schema=table-schema.json \
-  --metadata=destination-dataset=${BIGQUERY_DATASET_ID},destination-table=${BIGQUERY_TABLE_ID}
+  --metadata-from-file=metrics-schema=metrics-schema.json,table-schema-measurement=table-schema.json,inference-schema=inference-result-schema.json,table-schema-detection=human-detection-table-schema.json\
+  --metadata=destination-dataset-measurement=${BIGQUERY_DATASET_ID},destination-table-measurement=${BIGQUERY_METRICS_TABLE_ID},destination-dataset-detection=${BIGQUERY_DATASET_ID},destination-table-detection=${BIGQUERY_INFERENCE_TABLE_ID}

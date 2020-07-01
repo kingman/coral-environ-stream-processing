@@ -4,6 +4,7 @@ import org.apache.beam.sdk.transforms.DoFn;
 
 import com.google.cloud.solutions.common.DeviceInfo;
 import com.google.cloud.solutions.common.Measurement;
+import com.google.cloud.solutions.utils.PubsubMessageUtil;
 
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessage;
 import com.google.gson.JsonArray;
@@ -23,7 +24,7 @@ public class PubsubMessageToMeasurement extends DoFn<PubsubMessage, Measurement>
 
     @ProcessElement
     public void processElement(@Element PubsubMessage message, OutputReceiver<Measurement> receiver) {
-        DeviceInfo deviceInfo = createDeviceInfo(message);
+        DeviceInfo deviceInfo = PubsubMessageUtil.extractDeviceInfo(message);
 
         JsonObject payloadJson = new JsonParser().parse(new String(message.getPayload())).getAsJsonObject();
         JsonArray measurementsJson = payloadJson.get("enviro").getAsJsonArray();
@@ -47,16 +48,5 @@ public class PubsubMessageToMeasurement extends DoFn<PubsubMessage, Measurement>
                 }
             });
         });
-    }
-
-    private DeviceInfo createDeviceInfo(PubsubMessage message) {
-        DeviceInfo deviceInfo = new DeviceInfo();
-        deviceInfo.setDeviceNumId(message.getAttribute("deviceNumId"));
-        deviceInfo.setDeviceId(message.getAttribute("deviceId"));
-        deviceInfo.setDeviceRegistryId(message.getAttribute("deviceRegistryId"));
-        deviceInfo.setDeviceRegistryLocation(message.getAttribute("deviceRegistryLocation"));
-        deviceInfo.setProjectId(message.getAttribute("projectId"));
-        deviceInfo.setSubFolder(message.getAttribute("subFolder"));
-        return deviceInfo;
     }
 }

@@ -2,24 +2,22 @@ package com.google.cloud.solutions.transformation;
 
 import com.google.api.services.bigquery.model.TableSchema;
 import com.google.cloud.solutions.common.DeviceInfo;
-import com.google.cloud.solutions.common.MeasurementSummary;
+import com.google.cloud.solutions.common.HumanDetectionResult;
 import com.google.cloud.solutions.utils.TableDestinationLoader;
 import com.google.cloud.solutions.utils.TableSchemaLoader;
 
 import org.apache.beam.sdk.io.gcp.bigquery.DynamicDestinations;
 import org.apache.beam.sdk.io.gcp.bigquery.TableDestination;
-import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.ValueInSingleWindow;
 
-public class MeasurementSummaryToTableDestination
-        extends DynamicDestinations<KV<String, MeasurementSummary>, DeviceInfo> {
+public class HumanDetectionResultToTableDestination extends DynamicDestinations<HumanDetectionResult, DeviceInfo> {
 
-    private static final long serialVersionUID = 120337140386439827L;
-    private static final String MESSAGE_TYPE = "measurement";
+    private static final long serialVersionUID = 1L;
+    private static final String MESSAGE_TYPE = "detection";
 
     @Override
-    public DeviceInfo getDestination(ValueInSingleWindow<KV<String, MeasurementSummary>> element) {
-        return element.getValue().getValue().getDeviceInfo();
+    public DeviceInfo getDestination(ValueInSingleWindow<HumanDetectionResult> element) {
+        return element.getValue().getDeviceInfo();
     }
 
     @Override

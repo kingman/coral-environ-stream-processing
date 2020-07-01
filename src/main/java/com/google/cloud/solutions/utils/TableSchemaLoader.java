@@ -16,17 +16,17 @@ import com.google.gson.JsonParser;
 import com.google.common.collect.ImmutableList;
 
 public class TableSchemaLoader {
-    private static final String TABLE_SCHEMA_METADATA_KEY = "table-schema";
+    private static final String TABLE_SCHEMA_METADATA_PREFIX = "table-schema-";
     private static Map<String, TableSchema> schemaCache = new HashMap<>();
 
-    public static TableSchema getSchema(DeviceInfo deviceInfo) {
-        final String devicePath = getCacheKey(deviceInfo);
+    public static TableSchema getSchema(DeviceInfo deviceInfo, String messageType) {
+        final String devicePath = getCacheKey(deviceInfo, messageType);
 
         if (schemaCache.containsKey(devicePath)) {
             return schemaCache.get(devicePath);
         }
 
-        String schemaStr = fetchSchema(deviceInfo);
+        String schemaStr = fetchMetadata(deviceInfo, TABLE_SCHEMA_METADATA_PREFIX+messageType);
         if (schemaStr == null) {
             throw new RuntimeException(String.format("No table scheme find for device: %s", devicePath));
         }
@@ -36,18 +36,18 @@ public class TableSchemaLoader {
 
     }
 
-    private static String getCacheKey(DeviceInfo deviceInfo) {
-        return String.format("projects/%s/locations/%s/registries/%s/devices/%s", deviceInfo.getProjectId(),
-                deviceInfo.getDeviceRegistryLocation(), deviceInfo.getDeviceRegistryId(), deviceInfo.getDeviceId());
+    private static String getCacheKey(DeviceInfo deviceInfo, String messageType) {
+        return String.format("projects/%s/locations/%s/registries/%s/devices/%s/%s", deviceInfo.getProjectId(),
+                deviceInfo.getDeviceRegistryLocation(), deviceInfo.getDeviceRegistryId(), deviceInfo.getDeviceId(), messageType);
 
     }
 
-    private static String fetchSchema(DeviceInfo deviceInfo) {
+    private static String fetchMetadata(DeviceInfo deviceInfo, String metadataKey) {
         try {
             return GCPIoTCoreUtil
                     .getDeviceMetadata(deviceInfo.getDeviceId(), deviceInfo.getProjectId(),
                             deviceInfo.getDeviceRegistryLocation(), deviceInfo.getDeviceRegistryId())
-                    .get(TABLE_SCHEMA_METADATA_KEY);
+                    .get(metadataKey);
         } catch (Exception e) {
             return null;
         }
@@ -55,13 +55,25 @@ public class TableSchemaLoader {
 
     private static TableSchema createScheme(String schemaStr) {
         JsonArray fields = new JsonParser().parse(schemaStr).getAsJsonArray();
-        List<TableFieldSchema> fieldSchemas = new ArrayList<>();
+        List<TableFieldSchema> fieldSchemas = createFieldSchemaList(fields);
+        return new TableSchema().setFields(ImmutableList.copyOf(fieldSchemas));
+    }
 
+    private static List<TableFieldSchema> createFieldSchemaList(JsonArray fields) {
+        List<TableFieldSchema> fieldSchemas = new ArrayList<>();
         fields.forEach(field -> {
             JsonObject fieldObj = field.getAsJsonObject();
-            fieldSchemas.add(new TableFieldSchema().setName(fieldObj.get("name").getAsString())
-                    .setType(fieldObj.get("type").getAsString()).setMode(fieldObj.get("mode").getAsString()));
+            TableFieldSchema tableFieldSchema = new TableFieldSchema()
+            .setName(fieldObj.get("name").getAsString())
+            .setType(fieldObj.get("type").getAsString())
+            .setMode(fieldObj.get("mode").getAsString());
+            if("RECORD".equalsIgnoreCase(fieldObj.get("type").getAsString())) {
+                if(fieldObj.has("fields")) {
+                    tableFieldSchema.setFields(createFieldSchemaList(fieldObj.get("fields").getAsJsonArray()));
+                }
+            }
+            fieldSchemas.add(tableFieldSchema);
         });
-        return new TableSchema().setFields(ImmutableList.copyOf(fieldSchemas));
+        return fieldSchemas;
     }
 }

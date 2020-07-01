@@ -13,10 +13,15 @@ import org.json.JSONTokener;
 
 public class JsonSchemaValidator {
 
-    private static final String SCHEMA_METADATA_KEY = "metrics-schema";
-    private static Map<String, Schema> schemaCache = new HashMap<>();
+    private final String schemaMetadataKey;
+    private Map<String, Schema> schemaCache;
 
-    public static Boolean validate(PubsubMessage message) {
+    public JsonSchemaValidator(String schemaMetadataKey) {
+        this.schemaMetadataKey = schemaMetadataKey;
+        this.schemaCache = new HashMap<>();
+    }
+
+    public Boolean validate(PubsubMessage message) {
         Schema schema = getSchema(message);
         if (schema == null) { // not schema available to validate against
             return true;
@@ -30,7 +35,7 @@ public class JsonSchemaValidator {
         return true;
     }
 
-    private static Schema getSchema(PubsubMessage message) {
+    private Schema getSchema(PubsubMessage message) {
         final String devicePath = getCacheKey(message);
 
         if (schemaCache.containsKey(devicePath)) {
@@ -48,19 +53,19 @@ public class JsonSchemaValidator {
         return schemaCache.get(devicePath);
     }
 
-    private static String getCacheKey(PubsubMessage message) {
+    private String getCacheKey(PubsubMessage message) {
         return String.format("projects/%s/locations/%s/registries/%s/devices/%s", message.getAttribute("projectId"),
                 message.getAttribute("deviceRegistryLocation"), message.getAttribute("deviceRegistryId"),
                 message.getAttribute("deviceId"));
 
     }
 
-    private static String getSchemaString(PubsubMessage message) {
+    private String getSchemaString(PubsubMessage message) {
         try {
             return GCPIoTCoreUtil
                     .getDeviceMetadata(message.getAttribute("deviceId"), message.getAttribute("projectId"),
                             message.getAttribute("deviceRegistryLocation"), message.getAttribute("deviceRegistryId"))
-                    .get(SCHEMA_METADATA_KEY);
+                    .get(schemaMetadataKey);
         } catch (Exception e) {
             return null;
         }
