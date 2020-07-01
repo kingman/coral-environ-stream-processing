@@ -1,6 +1,9 @@
 package com.google.cloud.solutions.common;
 
-public class Detection {
+import java.io.Serializable;
+
+public class Detection implements Serializable {
+    private static final long serialVersionUID = 8387978511278888235L;
     private String label;
     private String score;
     private Integer x1;

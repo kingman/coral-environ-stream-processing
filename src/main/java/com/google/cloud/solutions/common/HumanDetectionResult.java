@@ -1,8 +1,10 @@
 package com.google.cloud.solutions.common;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class HumanDetectionResult {
+public class HumanDetectionResult implements Serializable {
+    private static final long serialVersionUID = 5515621156850803416L;
     private DeviceInfo deviceInfo;
     private String timestampStr;
     private Integer count;
