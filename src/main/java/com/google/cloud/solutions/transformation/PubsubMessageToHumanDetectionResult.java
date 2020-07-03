@@ -33,7 +33,7 @@ public class PubsubMessageToHumanDetectionResult extends DoFn<PubsubMessage, Hum
         DeviceInfo deviceInfo = PubsubMessageUtil.extractDeviceInfo(message);
 
         JsonObject payloadJson = new JsonParser().parse(new String(message.getPayload())).getAsJsonObject();
-        JsonArray detectionsJson = payloadJson.get("Detection Results").getAsJsonArray();
+        JsonArray detectionsJson = payloadJson.get("person_detection").getAsJsonArray();
 
         detectionsJson.forEach(detectionJson -> {
             HumanDetectionResult result = new HumanDetectionResult();
