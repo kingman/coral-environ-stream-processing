@@ -24,9 +24,8 @@ if [ -z "${DATAFLOW_TEMPLATE_BUCKET}" ]; then
     exit 1
 fi
 
-mvn compile exec:java -Dexec.mainClass=com.google.cloud.solutions.IoTStreamAnalytics -Dexec.args="\
-  --runner=DataflowRunner \
-  --project=${GOOGLE_CLOUD_PROJECT} \
-  --stagingLocation=gs://${DATAFLOW_TEMPLATE_BUCKET}/staging \
-  --templateLocation=gs://${DATAFLOW_TEMPLATE_BUCKET}/templates/iot-stream-processing" \
-  -Pdataflow-runner
+docker run -it --rm --name my-maven-project -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven:3.6.3-jdk-11 mvn compile exec:java -Dexec.mainClass=com.google.cloud.solutions.IoTStreamAnalytics -Dexec.args="\
+--runner=DataflowRunner \
+--project=${GOOGLE_CLOUD_PROJECT} \
+--stagingLocation=gs://${DATAFLOW_TEMPLATE_BUCKET}/staging \
+--templateLocation=gs://${DATAFLOW_TEMPLATE_BUCKET}/templates/iot-stream-processing" -Pdataflow-runner

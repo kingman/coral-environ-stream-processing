@@ -8,6 +8,7 @@ import com.google.cloud.solutions.common.Detection;
 import com.google.cloud.solutions.common.DeviceInfo;
 import com.google.cloud.solutions.common.HumanDetectionResult;
 import com.google.cloud.solutions.common.MeasurementSummary;
+import com.google.cloud.solutions.common.UnParsedMessage;
 
 public class TableRowMapperUtil {
 
@@ -43,6 +44,11 @@ public class TableRowMapperUtil {
         tableRow.set("Detections", detections);
     }
 
+    public static void mapUnParsedMessage(UnParsedMessage message, TableRow tableRow) {
+        mapDeviceInfo(message.getDeviceInfo(), tableRow);
+        tableRow.set("Message", message.getMessage());
+    }
+
     private static void mapDetection(Detection detection, TableRow tableRow) {
         tableRow
         .set("Label", detection.getLabel())
@@ -52,5 +58,4 @@ public class TableRowMapperUtil {
         .set("X2", detection.getX2())
         .set("Y2", detection.getY2());
     }
-
 }

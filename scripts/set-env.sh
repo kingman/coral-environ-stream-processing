@@ -23,3 +23,4 @@ export DATAFLOW_TEMPLATE_BUCKET=stream-processing-${GOOGLE_CLOUD_PROJECT}
 export BIGQUERY_DATASET_ID=foglamp
 export BIGQUERY_METRICS_TABLE_ID=metrics_summary
 export BIGQUERY_INFERENCE_TABLE_ID=inference_result
+export BIGQUERY_UNKNOWN_MESSAGE_TABLE_ID=unkown_message

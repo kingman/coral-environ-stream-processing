@@ -11,7 +11,7 @@
         }
     },
     "required": [
-        "Detection Results"
+        "person_detection"
     ],
     "definitions": {
         "detections": {

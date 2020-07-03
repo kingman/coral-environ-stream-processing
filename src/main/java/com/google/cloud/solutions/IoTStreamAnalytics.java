@@ -3,6 +3,7 @@ package com.google.cloud.solutions;
 import com.google.cloud.solutions.common.HumanDetectionResult;
 import com.google.cloud.solutions.common.Measurement;
 import com.google.cloud.solutions.common.MeasurementSummary;
+import com.google.cloud.solutions.common.UnParsedMessage;
 import com.google.cloud.solutions.transformation.HumanDetectionResultTableRowMapper;
 import com.google.cloud.solutions.transformation.HumanDetectionResultToTableDestination;
 import com.google.cloud.solutions.transformation.MeasurementSummaryTableRowMapper;
@@ -11,6 +12,9 @@ import com.google.cloud.solutions.transformation.MeasurementToMeasurementSummary
 import com.google.cloud.solutions.transformation.PubsubMessageBranch;
 import com.google.cloud.solutions.transformation.PubsubMessageToHumanDetectionResult;
 import com.google.cloud.solutions.transformation.PubsubMessageToMeasurement;
+import com.google.cloud.solutions.transformation.PubsubMessageToUnParsedMessage;
+import com.google.cloud.solutions.transformation.UnParsedMessageTableRowMapper;
+import com.google.cloud.solutions.transformation.UnParsedMessageToTableDestination;
 import com.google.cloud.solutions.utils.MeasurementKeyGenerator;
 import com.google.cloud.solutions.utils.MeasurementTimestampGenerator;
 import com.google.cloud.solutions.utils.OldMeasurementFilter;
@@ -88,9 +92,21 @@ public class IoTStreamAnalytics {
 
                 metricsProcessing(metricsPipeline.get(metricTag), options);
                 inferenceDataProcessing(metricsPipeline.get(inferenceTag), options);
+                unknownMessageProcessing(metricsPipeline.get(unknownMessageTag), options);
 
                 pipeline.run();
         }
+
+        private static void unknownMessageProcessing(PCollection<PubsubMessage> unknownMessages, IoTStreamAnalyticsOptions options) {
+                unknownMessages
+                .apply("Extract the unknown message", ParDo.of(new PubsubMessageToUnParsedMessage()))
+                .apply("Store message to BigQuery", BigQueryIO.<UnParsedMessage>write()
+                .to(new UnParsedMessageToTableDestination())
+                .withFormatFunction(new UnParsedMessageTableRowMapper())
+                .withCreateDisposition(CreateDisposition.CREATE_IF_NEEDED)
+                .withWriteDisposition(WriteDisposition.WRITE_APPEND));
+        }
+        
 
         private static void metricsProcessing(PCollection<PubsubMessage> metricsPipeline, IoTStreamAnalyticsOptions options) {
                 final OldMeasurementFilter oldMeasurementFilter = new OldMeasurementFilter(options.getAllowedTimestampSkew());
