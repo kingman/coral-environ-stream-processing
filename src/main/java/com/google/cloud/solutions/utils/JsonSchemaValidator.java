@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessage;
 import org.apache.beam.sdk.transforms.SerializableFunction;
 import org.everit.json.schema.Schema;
-import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -32,7 +31,7 @@ public class JsonSchemaValidator implements SerializableFunction<PubsubMessage, 
         try {
             JSONObject jsonSubject = new JSONObject(new JSONTokener(new ByteArrayInputStream(message.getPayload())));
             schema.validate(jsonSubject);
-        } catch (ValidationException e) {
+        } catch (Exception e) {
             return false;
         }
         return true;
