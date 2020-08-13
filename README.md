@@ -123,14 +123,9 @@ In Cloud Shell, do the following:
 
 1. To continue with running the command, enter **yes**.
 
-## Create and configure IoT Core device
+## Add the public key to IoT Core device
 
-An Cloud IoT Core [device](https://cloud.google.com/iot/docs/concepts/devices) is needed for an IoT device to connect and push data to cloud. In this sample the Dataflow streaming pipeline also needs the metadata values from the device in order to validate the incoming event data and get the schema for the output table.
-
-1. In Cloud Shell, create and configure the IoT Core device:
-
-        cd "$HOME"/coral-environ-stream-processing/scripts
-        ./set-device-metadata.sh
+In order for your device to connect with Cloud IoT Core [device](https://cloud.google.com/iot/docs/concepts/devices) your device's public key needs to be configured to the corresponding Cloud IoT Core device.
 
 1. Manually add the public key of your device through [Cloud Console](http://console.cloud.google.com/iot)
 

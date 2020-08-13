@@ -59,6 +59,29 @@ resource "google_cloudiot_registry" "device-registry" {
   }
 }
 
+resource "google_cloudiot_device" "iot-device" {
+  name     = var.google_iot_device_id
+  registry = google_cloudiot_registry.device-registry.id
+
+  metadata = {
+    metrics-schema = file("../scripts/metrics-schema.json")
+    table-schema-measurement = file("../scripts/table-schema.json")
+    inference-schema = file("../scripts/inference-result-schema.json")
+    table-schema-detection = file("../scripts/human-detection-table-schema.json")
+    table-schema-unknown-message = file("../scripts/unknown-message-table-schema.json")
+    destination-dataset-measurement=var.google_bigquery_dataset_id
+    destination-table-measurement=var.google_bigquery_metrics_table_id
+    destination-dataset-detection=var.google_bigquery_dataset_id
+    destination-table-detection=var.google_bigquery_inference_table_id
+    destination-dataset-unknown-message=var.google_bigquery_dataset_id
+    destination-table-unknown-message=var.google_bigquery_unknown_message_table_id
+  }
+
+  depends_on = [
+      google_cloudiot_registry.device-registry
+  ]
+}
+
 resource "google_bigquery_dataset" "dataset" {
     dataset_id = var.google_bigquery_dataset_id
     location = var.google_bigquery_default_region

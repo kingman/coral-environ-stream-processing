@@ -50,6 +50,16 @@ if [ -z "${GOOGLE_CLOUD_ZONE}" ]; then
     exit 1
 fi
 
+if [ -z "${IOT_REGISTRY_ID}" ]; then
+    echo 'The IOT_REGISTRY_ID environment variable that states the IoT Core registry id that Terraform will use is not defined. Terminating...'
+    exit 1
+fi
+
+if [ -z "${IOT_DEVICE_ID}" ]; then
+    echo 'The IOT_DEVICE_ID environment variable that states the IoT Core device id that Terraform will use is not defined. Terminating...'
+    exit 1
+fi
+
 if [ -z "${GOOGLE_APPLICATION_CREDENTIALS}" ]; then
     echo 'The GOOGLE_APPLICATION_CREDENTIALS environment variable that points to the default Google Cloud application credentials that Terraform will use is not defined. Terminating...'
     exit 1
@@ -62,6 +72,21 @@ fi
 
 if [ -z "${BIGQUERY_DATASET_ID}" ]; then
     echo 'The BIGQUERY_DATASET_ID environment variable that points to the Google Cloud BigQuery dataset is not defined. Terminating...'
+    exit 1
+fi
+
+if [ -z "${BIGQUERY_METRICS_TABLE_ID}" ]; then
+    echo 'The BIGQUERY_METRICS_TABLE_ID environment variable that points to the Google Cloud BigQuery table is not defined. Terminating...'
+    exit 1
+fi
+
+if [ -z "${BIGQUERY_INFERENCE_TABLE_ID}" ]; then
+    echo 'The BIGQUERY_INFERENCE_TABLE_ID environment variable that points to the Google Cloud BigQuery table is not defined. Terminating...'
+    exit 1
+fi
+
+if [ -z "${BIGQUERY_UNKNOWN_MESSAGE_TABLE_ID}" ]; then
+    echo 'The BIGQUERY_UNKNOWN_MESSAGE_TABLE_ID environment variable that points to the Google Cloud BigQuery table is not defined. Terminating...'
     exit 1
 fi
 
@@ -136,8 +161,12 @@ google_project_id="${GOOGLE_CLOUD_PROJECT}"
 google_default_region="${GOOGLE_CLOUD_REGION}"
 google_default_zone="${GOOGLE_CLOUD_ZONE}"
 google_iot_registry_id="${IOT_REGISTRY_ID}"
+google_iot_device_id="${IOT_DEVICE_ID}"
 google_bigquery_default_region="${GOOGLE_BIGQUERY_REGION}"
 google_bigquery_dataset_id="${BIGQUERY_DATASET_ID}"
+google_bigquery_metrics_table_id="${BIGQUERY_METRICS_TABLE_ID}"
+google_bigquery_inference_table_id="${BIGQUERY_INFERENCE_TABLE_ID}"
+google_bigquery_unknown_message_table_id="${BIGQUERY_UNKNOWN_MESSAGE_TABLE_ID}"
 google_dataflow_default_bucket="${DATAFLOW_TEMPLATE_BUCKET}"
 stream_processing_window_size=40
 stream_processing_window_frequency=15
