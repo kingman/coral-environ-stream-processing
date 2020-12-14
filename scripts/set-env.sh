@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -o nounset
+
 export TF_SERVICE_ACCOUNT_NAME=tf-service-account
 export TF_STATE_PROJECT=${GOOGLE_CLOUD_PROJECT}
 export TF_STATE_BUCKET=tf-state-bucket-${TF_STATE_PROJECT}
