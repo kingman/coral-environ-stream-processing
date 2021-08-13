@@ -75,7 +75,7 @@ EOF
     fi    
 fi
 
-FOGLAMP_CERT_DIR=/usr/local/foglamp/data/etc/certs
+FOGLAMP_CERT_DIR=/usr/local/foglamp/data/etc/certs/pem
 GCP_ROOT_CERT_PATH="${FOGLAMP_CERT_DIR}/roots.pem"
 if [ ! -f "${GCP_ROOT_CERT_PATH}" ]; then
     echo "## Download Google Cloud root cert"
@@ -94,6 +94,4 @@ if [ ! -f "${GCP_IOT_DEVICE_PRIVATE_KEY_PATH}" ]; then
     && mv ${PUBLIC_KEY_FILE} ${GCP_IOT_DEVICE_PUBLIC_KEY_PATH}
 fi
 
-echo "FogLAMP device public key for Cloud IoT Core:"
-cat ${GCP_IOT_DEVICE_PUBLIC_KEY_PATH}
 sudo reboot
