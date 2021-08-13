@@ -75,6 +75,76 @@ EOF
     fi    
 fi
 
+FOGLAMP_BASE_URL='http://localhost:8081/foglamp'
+
+GCP_PLUGIN_INSTALLED=$(curl -s "${FOGLAMP_BASE_URL}/plugins/installed?type=north" | jq -cr '.plugins[] | select(.name == "GCP")')
+if [[ ! ${GCP_PLUGIN_INSTALLED} ]]; then
+    curl -sX POST "${FOGLAMP_BASE_URL}/plugins" \
+    -H "Content-Type: application/json" \
+    --data-binary @- <<DATA
+{
+  "format": "repository",
+  "name": "foglamp-north-gcp",
+  "version": ""
+}
+DATA
+fi
+
+until [ -n "${GCP_PLUGIN_INSTALLED}" ]; do
+    GCP_PLUGIN_INSTALLED=$(curl -s "${FOGLAMP_BASE_URL}/plugins/installed?type=north" | jq -cr '.plugins[] | select(.name == "GCP")')
+    echo "## wait for plugin installation to complete."
+    sleep 3
+done
+
+if [ -z "${GOOGLE_CLOUD_PROJECT}" ]; then
+    echo 'The GOOGLE_CLOUD_PROJECT environment variable is not defined. The variable points to the Google Cloud project the FogLAMP connects to. Terminating...'
+    exit 1
+fi
+
+if [ -z "${GOOGLE_CLOUD_REGION}" ]; then
+    echo 'The GOOGLE_CLOUD_REGION environment variable is not defined. The variable points to the region of Google Cloud IoT registry. Terminating...'
+    exit 1
+fi
+
+if [ -z "${IOT_CORE_REGISTRY_ID}" ]; then
+    IOT_CORE_REGISTRY_ID=device-registry
+fi
+
+if [ -z "${IOT_CORE_DEVICE_ID}" ]; then
+    IOT_CORE_DEVICE_ID=enviro-plugin
+fi
+
+GCP_CONNECTOR_NAME='Cloud IoT Core Connector'
+GCP_CONNECTOR_INSTALLED=$(curl -s "${FOGLAMP_BASE_URL}/north" | jq -cr ".[] | select(.name == \"${GCP_CONNECTOR_NAME}\")")
+if [[ ! ${GCP_CONNECTOR_INSTALLED} ]]; then
+    curl -sX POST "${FOGLAMP_BASE_URL}/scheduled/task" \
+    -H "Content-Type: application/json" \
+    --data-binary @- <<DATA
+{
+    "name":"${GCP_CONNECTOR_NAME}",
+    "plugin":"GCP",
+    "type":"north",
+    "schedule_repeat":30,
+    "schedule_type":"3",
+    "schedule_enabled":false,
+    "config":
+        {
+            "project_id":{"value":"${GOOGLE_CLOUD_PROJECT}"},
+            "region":{"value":"${GOOGLE_CLOUD_REGION}"},
+            "registry_id":{"value":"${IOT_CORE_REGISTRY_ID}"},
+            "device_id":{"value":"${IOT_CORE_DEVICE_ID}"},
+            "key":{"value":"rsa_private"}
+        }
+}
+DATA
+fi
+
+until [ -n "${GCP_CONNECTOR_INSTALLED}" ]; do
+    GCP_CONNECTOR_INSTALLED=$(curl -s "${FOGLAMP_BASE_URL}/north" | jq -cr ".[] | select(.name == \"${GCP_CONNECTOR_NAME}\")")
+    echo "## wait for connector installation to complete."
+    sleep 3
+done
+
 FOGLAMP_CERT_DIR=/usr/local/foglamp/data/etc/certs/pem
 GCP_ROOT_CERT_PATH="${FOGLAMP_CERT_DIR}/roots.pem"
 if [ ! -f "${GCP_ROOT_CERT_PATH}" ]; then

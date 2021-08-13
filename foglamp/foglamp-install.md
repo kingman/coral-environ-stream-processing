@@ -12,6 +12,11 @@ The Dev Board set up and connected to internet by follwing the steps 1-5 of the 
         cd $HOME
         wget https://raw.githubusercontent.com/kingman/coral-environ-stream-processing/master/foglamp/install.sh
 
+1. Setting environment variables that store your Google Cloud project id and region, run the following command in your dev computer shell:
+
+        export GOOGLE_CLOUD_PROJECT=[PROJECT_ID]
+        export GOOGLE_CLOUD_REGION=[REGION]
+
 1. Run the installation script in the dev board's shell:
 
         . install.sh
@@ -37,22 +42,3 @@ The Dev Board set up and connected to internet by follwing the steps 1-5 of the 
         --device=enviro-plugin \
         --path=rsa_public.pem \
         --type=rsa-pem
-
-## Configure the Google Cloud IoT Core north plugin on FogLAMP
-1. Connect to the board's shell via MDT, run the following command in your dev computer shell:
-
-        mdt shell
-
-1. Download the plugin configuration script, run the following commands in the dev board's shell:
-
-        cd $HOME
-        wget https://raw.githubusercontent.com/kingman/coral-environ-stream-processing/master/foglamp/plugin-configure.sh
-
-1. Setting environment variables that store your Google Cloud project id and region, run the following command in your dev computer shell:
-
-        export GOOGLE_CLOUD_PROJECT=[PROJECT_ID]
-        export GOOGLE_CLOUD_REGION=[REGION]
-
-1. Run the plugin configuration script in the dev board's shell:
-
-        . plugin-configure.sh
