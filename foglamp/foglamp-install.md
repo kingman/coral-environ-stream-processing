@@ -12,7 +12,7 @@ The Dev Board set up and connected to internet by follwing the steps 1-5 of the 
         cd $HOME
         wget https://raw.githubusercontent.com/kingman/coral-environ-stream-processing/master/foglamp/install.sh
 
-1. Setting environment variables that store your Google Cloud project id and region, run the following command in your dev computer shell:
+1. Setting environment variables that store your Google Cloud project id and region, run the following commands in the dev board's shell:
 
         export GOOGLE_CLOUD_PROJECT=[PROJECT_ID]
         export GOOGLE_CLOUD_REGION=[REGION]
