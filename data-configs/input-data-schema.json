@@ -1,0 +1,100 @@
+[
+  {
+    "dataType": "edgex",
+    "schema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "$id": "http://www.edgexfoundry.org/schemas/edgexpert-metrics.json",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "readings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/reading"
+          }
+        }
+      },
+      "required": [
+        "device",
+        "readings"
+      ],
+      "definitions": {
+        "reading": {
+          "type": "object",
+          "properties": {
+            "id":{
+              "type": "string"
+            },
+            "origin":{
+              "type": "integer"
+            },
+            "device":{
+              "type": "string"
+            },
+            "name":{
+              "type": "string"
+            },
+            "value":{
+              "type": "string"
+            },
+            "valueType":{
+              "type": "string"
+            }
+          },
+          "required": [
+            "origin",
+            "device",
+            "name",
+            "value",
+            "valueType"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "dataType": "foglamp-sinusoid",
+    "schema": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "$id": "http://example.com/example.json",
+      "type": "object",
+      "required": [
+          "sinusoid"
+      ],
+      "properties": {
+        "sinusoid": {
+          "$id": "#/properties/sinusoid",
+          "type": "array",
+          "items": {
+            "$id": "#/properties/sinusoid/items",
+            "anyOf": [
+              {
+                "$id": "#/properties/sinusoid/items/anyOf/0",
+                "type": "object",
+                "required": [
+                  "ts",
+                  "sinusoid"
+                ],
+                "properties": {
+                  "ts": {
+                    "$id": "#/properties/sinusoid/items/anyOf/0/properties/ts",
+                    "type": "string"
+                  },
+                  "sinusoid": {
+                    "$id": "#/properties/sinusoid/items/anyOf/0/properties/sinusoid",
+                    "type": "number"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,8 @@
+{
+    "cloudIoT.attr.deviceNumId": "DeviceNumId",
+    "cloudIoT.attr.deviceId": "DeviceId",
+    "sinusoid[]": {      
+      "ts": "TimeStamp",
+      "sinusoid": "Value"
+    }
+}
