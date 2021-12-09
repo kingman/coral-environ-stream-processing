@@ -18,5 +18,15 @@
       "mode": "REQUIRED",
       "name": "Value",
       "type": "FLOAT"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "Square",
+      "type":"FLOAT"
+    },
+    {
+      "mode": "NULLABLE",
+      "name": "Max",
+      "type":"FLOAT"
     }
 ]

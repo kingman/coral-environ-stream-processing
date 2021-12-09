@@ -3,6 +3,8 @@
     "cloudIoT.attr.deviceId": "DeviceId",
     "sinusoid[]": {      
       "ts": "TimeStamp",
-      "sinusoid": "Value"
+      "sinusoid": "Value",
+      "square": "Square",
+      "max": "Max"
     }
 }

@@ -88,6 +88,14 @@
                   "sinusoid": {
                     "$id": "#/properties/sinusoid/items/anyOf/0/properties/sinusoid",
                     "type": "number"
+                  },
+                  "square": {
+                    "$id": "#/properties/sinusoid/items/anyOf/0/properties/square",
+                    "type": "number"
+                  },
+                  "max": {
+                    "$id": "#/properties/sinusoid/items/anyOf/0/properties/max",
+                    "type": "number"
                   }
                 }
               }
